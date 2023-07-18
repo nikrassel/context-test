@@ -24,13 +24,13 @@
       <div class="table-one">
         <div class="title">
           <span>List 1</span>
-          <button>Сортировать</button>
+          <button @click="onClick">Сортировать</button>
         </div>
         <div>
           <div
-            v-for="box of colorBoxes"
+            v-for="box in listOne.numberOfItems"
             class="box"
-            :style="{ backgroundColor: box.color }"
+            :style="{ backgroundColor: listOne.itemColor }"
             :key="box.color"
           ></div>
         </div>
@@ -40,10 +40,15 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
-  data: () => ({
-    colorBoxes: [{ color: "#BF2B45" }, { color: "blue" }, { color: "green" }],
-  }),
+  data: () => ({}),
+  computed: {
+    ...mapGetters(["listOne"]),
+    onClick() {
+      console.log(this.listOne);
+    },
+  },
 };
 </script>
 
