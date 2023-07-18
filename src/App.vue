@@ -1,53 +1,49 @@
 <template>
   <div class="wrapper">
-    <div class="list">
-      <details class="list-one">
-        <summary>
-          <input type="checkbox" />
-          List 1
-        </summary>
-        <div>
-          <input type="checkbox" />
-          Item 1
-          <input type="number" />
-          <input type="color" />
-        </div>
-        <div>
-          <input type="checkbox" />
-          Item 2
-          <input type="number" />
-          <input type="color" />
-        </div>
-      </details>
+    <div class="list-table">
+      <ListSettings :list="listOne" :listNumber="1" />
     </div>
-    <div class="item">
-      <div class="table-one">
-        <div class="title">
-          <span>List 1</span>
-          <button @click="onClick">Сортировать</button>
-        </div>
-        <div>
-          <div
-            v-for="box in listOne.numberOfItems"
-            class="box"
-            :style="{ backgroundColor: listOne.itemColor }"
-            :key="box.color"
-          ></div>
-        </div>
-      </div>
+    <div class="item-table">
+      <ItemPresentation :list="listOne" :listNumber="1" />
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import ListSettings from "./components/ListSettings.vue";
+import ItemPresentation from "./components/ItemPresentation.vue";
 export default {
-  data: () => ({}),
-  computed: {
-    ...mapGetters(["listOne"]),
-    onClick() {
-      console.log(this.listOne);
+  data: () => ({
+    listOne: {
+      itemOne: {
+        numberOfItems: 5,
+        color: "#BF2B45",
+        id: "1",
+        show: true,
+      },
+      itemTwo: {
+        numberOfItems: 5,
+        color: "#1A4784",
+        id: "2",
+        show: false,
+      },
+      itemThree: {
+        numberOfItems: 5,
+        color: "#00A351",
+        id: "3",
+        show: false,
+      },
+      itemFour: {
+        numberOfItems: 5,
+        color: "#CB6423",
+        id: "4",
+        show: false,
+      },
     },
+  }),
+  components: {
+    ListSettings,
+    ItemPresentation,
   },
 };
 </script>
@@ -55,37 +51,19 @@ export default {
 <style lang="scss">
 .wrapper {
   display: flex;
-  border: 2px solid black;
+  border: 2px solid rgb(0, 0, 0);
   justify-content: space-between;
 }
-.list {
+.list-table {
   border: 2px solid black;
   margin: 10px;
   display: inline-block;
   width: 40%;
 }
-.item {
+.item-table {
   border: 2px solid black;
   margin: 10px;
   display: inline-block;
   width: 40%;
-}
-.list-one {
-  margin: 15px 0 10px 10px;
-}
-.table-one {
-  margin: 15px 10px 10px 10px;
-  border: 2px solid black;
-}
-.title {
-  justify-content: space-between;
-  display: flex;
-  padding: 5px;
-}
-.box {
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  margin: 2px;
 }
 </style>
