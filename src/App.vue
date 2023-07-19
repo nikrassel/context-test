@@ -1,10 +1,20 @@
 <template>
   <div class="wrapper">
     <div class="list-table">
-      <ListSettings :list="listOne" :listNumber="1" />
+      <ListSettings
+        v-for="(list, index) in listArray"
+        :list="list"
+        :listNumber="index + 1"
+        :key="index"
+      />
     </div>
     <div class="item-table">
-      <ItemPresentation :list="listOne" :listNumber="1" />
+      <ItemPresentation
+        v-for="(list, index) in listArray"
+        :list="list"
+        :listNumber="index + 1"
+        :key="index"
+      />
     </div>
   </div>
 </template>
@@ -12,38 +22,20 @@
 <script>
 import ListSettings from "./components/ListSettings.vue";
 import ItemPresentation from "./components/ItemPresentation.vue";
+import { mapGetters } from "vuex";
 export default {
   data: () => ({
-    listOne: {
-      itemOne: {
-        numberOfItems: 5,
-        color: "#BF2B45",
-        id: "1",
-        show: true,
-      },
-      itemTwo: {
-        numberOfItems: 5,
-        color: "#1A4784",
-        id: "2",
-        show: false,
-      },
-      itemThree: {
-        numberOfItems: 5,
-        color: "#00A351",
-        id: "3",
-        show: false,
-      },
-      itemFour: {
-        numberOfItems: 5,
-        color: "#CB6423",
-        id: "4",
-        show: false,
-      },
-    },
+    listArray: [],
   }),
   components: {
     ListSettings,
     ItemPresentation,
+  },
+  computed: {
+    ...mapGetters(["allLists"]),
+  },
+  mounted() {
+    this.listArray = this.allLists;
   },
 };
 </script>

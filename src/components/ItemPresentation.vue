@@ -2,17 +2,30 @@
   <div class="item-presentation">
     <div class="title">
       <span>List {{ listNumber }}</span>
-      <button @click="sorting">Сортировать</button>
+      <button v-if="!sort" @click="changeState()">Сортировать</button>
+      <button v-else @click="changeState()">Перемешать</button>
     </div>
-    <div
-      v-for="item in Object.values(list).filter((elem) => elem.show)"
-      :key="item.id"
-    >
+    <div v-if="sort">
       <div
-        v-for="box in item.numberOfItems"
+        v-for="item in Object.values(list).filter((elem) => elem.show)"
+        :key="item.id"
+      >
+        <div
+          v-for="box in item.numberOfItems"
+          class="box"
+          :style="{ backgroundColor: item.color }"
+          :key="box"
+          @click="removeBox(item)"
+        ></div>
+      </div>
+    </div>
+    <div v-else>
+      <div
+        v-for="(box, index) in shuffleBoxes"
         class="box"
-        :style="{ backgroundColor: item.color }"
-        :key="box"
+        :style="{ backgroundColor: box.color }"
+        :key="index"
+        @click="removeBox(box)"
       ></div>
     </div>
   </div>
@@ -21,8 +34,7 @@
 <script>
 export default {
   data: () => ({
-    sort: false,
-    combineArray: [],
+    sort: true,
   }),
   props: {
     list: {
@@ -31,19 +43,35 @@ export default {
     },
     listNumber: {
       required: true,
-      type: Number,
     },
   },
   computed: {
-    sorting: function () {
+    shuffleBoxes() {
+      let shuffledArray = [];
       for (let item in this.list) {
         if (this.list[item].show) {
-          for (let i = 0; i < this.list[item].numberOfItems; i += 1) {
-            this.combineArray.push(this.list[item].color);
+          for (let i = 0; i < this.list[item].numberOfItems; i++) {
+            shuffledArray.push({
+              color: this.list[item].color,
+              id: this.list[item].id,
+            });
           }
         }
       }
-      console.log(this.combineArray);
+      return shuffledArray.sort(() => Math.random() - 0.5);
+    },
+  },
+  methods: {
+    removeBox(item) {
+      Object.values(this.list).map((elem) => {
+        if (elem.id === item.id) {
+          elem.numberOfItems -= 1;
+        }
+        return elem;
+      });
+    },
+    changeState() {
+      this.sort = !this.sort;
     },
   },
 };
