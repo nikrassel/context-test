@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import { reactive, isReactive } from "vue";
 export default {
   data: () => ({
     allActive: false,
@@ -89,6 +88,6 @@ export default {
   margin-left: 10px;
 }
 .half-selected {
-  box-shadow: inset 0.8rem 0 0 0 rgba(0, 123, 255, 0.25);
+  box-shadow: 0px 0px 0px 5px rgba(44, 104, 254) inset;
 }
 </style>
