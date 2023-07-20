@@ -2,10 +2,11 @@
   <div class="item-presentation">
     <div class="title">
       <span>List {{ listNumber }}</span>
-      <button v-if="!sort" @click="changeState()">Сортировать</button>
-      <button v-else @click="changeState()">Перемешать</button>
+      <button @click="changeState()">
+        {{ sorted ? "Перемешать" : "Сортировать" }}
+      </button>
     </div>
-    <div v-if="sort">
+    <div v-if="sorted">
       <div
         v-for="item in Object.values(list).filter((elem) => elem.show)"
         :key="item.id"
@@ -21,7 +22,7 @@
     </div>
     <div v-else>
       <div
-        v-for="(box, index) in shuffleBoxes"
+        v-for="(box, index) in shuffleBoxes()"
         class="box"
         :style="{ backgroundColor: box.color }"
         :key="index"
@@ -34,7 +35,7 @@
 <script>
 export default {
   data: () => ({
-    sort: true,
+    sorted: true,
   }),
   props: {
     list: {
@@ -45,7 +46,18 @@ export default {
       required: true,
     },
   },
-  computed: {
+  methods: {
+    removeBox(item) {
+      Object.values(this.list).map((elem) => {
+        if (elem.id === item.id) {
+          elem.numberOfItems -= 1;
+        }
+        return elem;
+      });
+    },
+    changeState() {
+      this.sorted = !this.sorted;
+    },
     shuffleBoxes() {
       let shuffledArray = [];
       for (let item in this.list) {
@@ -59,19 +71,6 @@ export default {
         }
       }
       return shuffledArray.sort(() => Math.random() - 0.5);
-    },
-  },
-  methods: {
-    removeBox(item) {
-      Object.values(this.list).map((elem) => {
-        if (elem.id === item.id) {
-          elem.numberOfItems -= 1;
-        }
-        return elem;
-      });
-    },
-    changeState() {
-      this.sort = !this.sort;
     },
   },
 };

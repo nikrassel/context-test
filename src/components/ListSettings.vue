@@ -3,27 +3,29 @@
     <summary>
       <input
         type="checkbox"
-        @change="selectAll"
+        @change="selectAll()"
         v-model="allActive"
         :class="checkSelection"
       />
       List {{ listNumber }}
     </summary>
-    <div
-      class="item-settings"
-      v-for="item in Object.values(list)"
-      :key="item.id"
-    >
-      <input type="checkbox" v-model="item.show" />
-      Item {{ item.id }}
-      <input
-        type="number"
-        :min="0"
-        v-model.number="item.numberOfItems"
-        :style="{ width: '45px' }"
-      />
-      <input class="color-control" type="color" v-model="item.color" />
-    </div>
+    <ul>
+      <li
+        class="item-settings"
+        v-for="item in Object.values(list)"
+        :key="item.id"
+      >
+        <input type="checkbox" v-model="item.show" />
+        Item {{ item.id }}
+        <input
+          type="number"
+          :min="0"
+          v-model.number="item.numberOfItems"
+          :style="{ width: '45px' }"
+        />
+        <input class="color-control" type="color" v-model="item.color" />
+      </li>
+    </ul>
   </details>
 </template>
 
@@ -42,20 +44,6 @@ export default {
     },
   },
   computed: {
-    selectAll: function () {
-      const inactiveItems = Object.values(this.list).filter(
-        (elem) => !elem.show
-      );
-      if (this.allActive && inactiveItems.length > 0) {
-        for (let item in this.list) {
-          this.list[item].show = true;
-        }
-      } else if (!this.allActive && inactiveItems.length < 1) {
-        for (let item in this.list) {
-          this.list[item].show = false;
-        }
-      }
-    },
     checkSelection() {
       const inactiveItems = Object.values(this.list).filter(
         (elem) => !elem.show
@@ -63,8 +51,7 @@ export default {
       if (inactiveItems.length === 0) {
         this.allActive = true;
         return "";
-      }
-      if (inactiveItems.length != Object.values(this.list).length) {
+      } else if (inactiveItems.length != Object.values(this.list).length) {
         this.allActive = false;
         return "half-selected";
       } else {
@@ -73,15 +60,32 @@ export default {
       }
     },
   },
+  methods: {
+    selectAll() {
+      const inactiveItems = Object.values(this.list).filter(
+        (elem) => !elem.show
+      );
+      if (this.allActive && inactiveItems.length > 0) {
+        for (let item in this.list) {
+          this.list[item].show = true;
+        }
+      } else if (!this.allActive && inactiveItems.length === 0) {
+        for (let item in this.list) {
+          this.list[item].show = false;
+        }
+      }
+    },
+  },
 };
 </script>
 
 <style lang="scss">
 .list-settings {
-  margin: 15px 0 10px 10px;
+  margin: 15px 0 5px 10px;
 }
 .item-settings {
-  margin: 0 0 5px 5px;
+  margin: 0 0 5px 0;
+  list-style-type: none;
 }
 .color-control {
   width: 25px;

@@ -163,19 +163,19 @@ export default createStore({
     allLists: (s) => s.allLists,
   },
   mutations: {
-    setNumber(state, newNumber) {
-      state.listOne.numberOfItems = newNumber;
+    setNumber(state, listIndex, item, newNumber) {
+      state.allLists[listIndex][item].numberOfItems = newNumber;
     },
-    setColor(state, newColor) {
-      state.listOne.itemColor = newColor;
+    setColor(state, listIndex, item, newColor) {
+      state.allLists[listIndex][item].color = newColor;
     },
   },
   actions: {
-    changeNumber({ commit }, newNumber) {
-      commit("setNumber", newNumber);
+    changeNumber({ commit }, listIndex, item, newNumber) {
+      commit("setNumber", listIndex, item, newNumber);
     },
-    changeColor({ commit }, newColor) {
-      commit("setColor", newColor);
+    changeColor({ commit }, listIndex, item, newNumber) {
+      commit("setColor", listIndex, item, newNumber);
     },
   },
   modules: {},
